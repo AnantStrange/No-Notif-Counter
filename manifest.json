@@ -1,0 +1,26 @@
+{
+    "name": "No Notif Count",
+    "description": "Chrome extenstion that removes the notification count in the tab titles",
+    "version": "1.0",
+    "manifest_version": 3,
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": [
+        "tabs",
+        "storage", 
+        "scripting"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+
+        }
+    },
+    "icons": {
+
+    }
+}
