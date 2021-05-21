@@ -14,10 +14,12 @@ toggle.addEventListener('change', async () => {
         let tabs = await chrome.tabs.query({currentWindow: true});
         for(var i = 0; i < tabs.length; i++) {
             let tab = tabs[i];
-            chrome.scripting.executeScript({
-                target: {tabId: tab.id},
-                function: removeNotificationCounter
-            });
+            if(tab.url.includes('https://') || tab.url.includes('http://')) {
+                chrome.scripting.executeScript({
+                    target: {tabId: tab.id},
+                    function: removeNotificationCounter
+                });
+            }
         }
                 
     } else {
