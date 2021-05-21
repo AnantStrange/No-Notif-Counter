@@ -1,14 +1,11 @@
 chrome.runtime.onInstalled.addListener(() => {
     console.log('Extension installed');
-    let enabled = true;
-    chrome.storage.sync.set({enabled});
+    chrome.storage.sync.set({enabled: true});
 });
 
 chrome.tabs.onCreated.addListener(async (tab) => {
-    console.log('Tab created');
-    chrome.storage.sync.get('enabled', ({enabled}) => {
+    chrome.storage.sync.get(['enabled'], ({enabled}) => {
         if(enabled === true) {
-            console.log('updating title');
             chrome.scripting.executeScript({
                 target: {tabId: tab.id},
                 function: removeNotificationCounter
@@ -18,11 +15,9 @@ chrome.tabs.onCreated.addListener(async (tab) => {
 });
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-    console.log('Tab updated');
-    chrome.storage.sync.get('enabled', ({enabled}) => {
+    chrome.storage.sync.get(['enabled'], ({enabled}) => {
         console.log(enabled);
         if(enabled === true) {
-            console.log('updating title');
             chrome.scripting.executeScript({
                 target: {tabId: tab.id},
                 function: removeNotificationCounter
