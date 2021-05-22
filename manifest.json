@@ -1,5 +1,6 @@
 {
-    "name": "No Notif Count",
+    "name": "No Notif Counter",
+    "author": "Nigel Davis",
     "description": "Chrome extenstion that removes the notification count in the tab titles",
     "version": "1.0",
     "manifest_version": 3,
