@@ -1,11 +1,18 @@
+// LISTENERS
+
+// handles everthing at the time of installation
 chrome.runtime.onInstalled.addListener(() => {
     console.log('Extension installed');
+    // set enabled to be true by default
     chrome.storage.sync.set({enabled: true});
 });
 
+// listener for new tabs being created
 chrome.tabs.onCreated.addListener(async (tab) => {
     chrome.storage.sync.get(['enabled'], ({enabled}) => {
-        if(enabled === true) {
+        console.log({'change': 'create', 'enabled': enabled});
+        if(enabled) {
+            // attempt to remove counter
             chrome.scripting.executeScript({
                 target: {tabId: tab.id},
                 function: removeNotificationCounter
@@ -14,10 +21,12 @@ chrome.tabs.onCreated.addListener(async (tab) => {
     });
 });
 
+// listener for tab updates (refresh, html changes, etc.)
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     chrome.storage.sync.get(['enabled'], ({enabled}) => {
-        console.log(enabled);
-        if(enabled === true) {
+        console.log({'change': 'update', 'enabled': enabled});
+        if(enabled) {
+            // attempt to remove counter
             chrome.scripting.executeScript({
                 target: {tabId: tab.id},
                 function: removeNotificationCounter
@@ -25,6 +34,9 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         }
     });
 });
+
+
+// FUNCTIONS
 
 // function to remove '(x)' from the beginning of a tab's title
 function removeNotificationCounter() {
