@@ -1,10 +1,23 @@
 // LISTENERS
 
 // handles everthing at the time of installation
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener(async () => {
     console.log('Extension installed');
     // set enabled to be true by default
     chrome.storage.sync.set({enabled: true});
+
+    // get list of open tabs
+    let tabs = await chrome.tabs.query({currentWindow: true});
+    for(var i = 0; i < tabs.length; i++) {
+        let tab = tabs[i];
+        // if tab is valid site, attempt to remove counter from title
+        if(tab.url.includes('https://') || tab.url.includes('http://')) {
+            chrome.scripting.executeScript({
+                target: {tabId: tab.id},
+                function: removeNotificationCounter
+            });
+        }
+    }
 });
 
 // listener for new tabs being created
