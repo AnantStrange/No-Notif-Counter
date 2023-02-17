@@ -45,10 +45,14 @@ toggle.addEventListener('change', async () => {
 // function to remove '(x)' from the beginning of a tab's title
 function removeNotificationCounter() {
     let title = document.title;
-    if(title[0] === '(' && title.includes(')')) {
-        let idx = title.indexOf(')');
-        title = title.slice(idx+1).trim();
+
+    let l = title.indexOf('(')
+    let r = title.indexOf(')')
+    if (l !== -1 && r !== -1 && l < r) {
+        toRemove = title.slice(l, r+1)
+        title = title.replace(toRemove, "").replace("  ", " ").trim()
     }
+
     document.title = title;
 }
 
