@@ -1,9 +1,26 @@
-# No Notif Counter
+# No Notif Counter - Enhanced
 
-**Chrome extenstion that removes the notification count in the tab titles**
+**A Chrome and Firefox extension that removes the notification count in tab titles.**  
 
-If you don't like when websites like YouTube and Facebook show the number of notifications you have on the tab bar then this is for you. No Notif Counter is a chrome extension that hides the notification counter on the tab bar so you aren't distracted from the important things.
+Tired of seeing distracting notification counters on your tabs? **No Notif Counter - Enhanced** removes those annoying `(X)` numbers from tab titles on websites like YouTube, Facebook, and more—so you can focus on what matters.  
 
-Want to try it out yourself? Now available [here](https://chrome.google.com/webstore/detail/no-notif-counter/bdghamogdpljmfcnhchdcfmgennokdoj/) on the chrome web store.
+### 🛠 Features
+✅ Tested on Chrome, Brave, and Firefox  
+✅ Removes notification counters from tab titles  
+✅ Lightweight and fast  
+✅ Open-source and customizable  
 
-![Promo](rsc/imgs/Promo1.jpg)
+### 🔥 Install Now
+- **[Chrome Web Store](#)** (Coming soon)  
+- **[Firefox Add-ons](#)** (Coming soon)  
+
+### 📸 Preview  
+![Promo](rsc/imgs/Promo1.jpg)  
+
+---
+
+### 💡 About This Project  
+This project is a fork of the original **No Notif Counter** by [Nigel Davis](https://github.com/nigeldavis), licensed under the **MIT License**. This version includes improved browser compatibility and additional refinements.  
+
+Want to contribute? Feel free to fork and improve! 🚀  
+
