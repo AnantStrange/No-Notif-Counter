@@ -1,35 +1,32 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="popup.css">
     </head>
     <body>
         <div class="header">
-            <h3>No Notif Counter</h3>
+            <h1 id="extension_name">No Notif Counter</h1>
+            <span class="toggle toggle--checked">
+                <span class="toggle_btn toggle_on toggle_btn--active">On</span>
+                <span class="toggle_btn toggle_off">Off</span>
+            </span>
         </div>
+
         <div class="settings">
-            <div class="title flex">
-                <div class="block">Settings</div>
+            <div class="input_block">
+                <label>Whitelist ("," separated URLs)</label>
+                <input id="whitelist" type="text" placeholder="example.com, site.org">
             </div>
-            <div class="option flex">
-                <label class="flex">
-                    <div>Hide notification counters</div>
-                    <div class="toggle flex">
-                        <input id="toggle" type="checkbox" checked>
-                        <div class="control"></div>
-                    </div>
-                </label>
+
+            <div class="input_block">
+                <label>Blacklist ("," separated URLs)</label>
+                <input id="blacklist" type="text" placeholder="example.com, site.org">
             </div>
-            <!-- <div class="option flex">
-                <label class="flex">
-                    <div>Enable on this site</div>
-                    <div class="toggle flex">
-                        <input type="checkbox" checked>
-                        <div class="control"></div>
-                    </div>
-                </label>
-            </div> -->
+
+            <button id="saveSettings", class="button" href="#">Save</button>
         </div>
+
         <script src="popup.js"></script>
     </body>
 </html>
+

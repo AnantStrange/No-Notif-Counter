@@ -36,11 +36,18 @@ waitForTabsReady();
 
 // Listneners
 // Runs on new or updated tabs
-browserAPI.tabs.onCreated.addListener((tab) => runScriptOnTab(tab.id));
-browserAPI.tabs.onUpdated.addListener((tabId, changeInfo, tab) => runScriptOnTab(tabId));
+browserAPI.tabs.onCreated.addListener((tab) => runScriptOnTab(tab.id, tab.url));
+browserAPI.tabs.onUpdated.addListener((tabId, changeInfo, tab) => runScriptOnTab(tabId, tab.url));
 
-async function runScriptOnTab(tabId) {
+async function runScriptOnTab(tabId, tabUrl) {
     console.log(`runScriptOnTab called for tabId: ${tabId}`);
+    // Skip internal browser pages
+    const blockedSchemes = ["chrome://", "brave://", "about://"];
+    if (!tabUrl || blockedSchemes.some(scheme => tabUrl.startsWith(scheme))) {
+        console.log(`Skipping internal page: ${tabUrl}`);
+        return;
+    }
+
     browserAPI.storage.sync.get(['enabled'], ({ enabled }) => {
         if (enabled) {
             if (browserAPI.scripting) {

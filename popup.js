@@ -1,64 +1,44 @@
 // INITIALIZATION
+let toggle = document.querySelector('.toggle');
+let toggleBtns = document.querySelectorAll('.toggle_btn');
+let whitelistInput = document.getElementById('whitelist');
+let blacklistInput = document.getElementById('blacklist');
+let saveButton = document.getElementById('saveSettings');
+const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
-// get the toggle element (toggles the extension functionality on/off)
-let toggle = document.getElementById('toggle');
-
-// set the value of the toggle switch to the value stored in the browser
-chrome.storage.sync.get('enabled', ({enabled}) => {
-    toggle.checked = enabled;
+// Load stored values
+browserAPI.storage.sync.get(['enabled'], (data) => {
+    let isEnabled = data.enabled ?? true;
+    updateToggleUI(isEnabled);
 });
-reportStatus('opened popup');
 
+// Function to update the UI based on the toggle state
+function updateToggleUI(isEnabled) {
+    toggle.classList.toggle('toggle--checked', isEnabled);
+    
+    toggleBtns.forEach(btn => {
+        btn.classList.toggle('toggle_btn--active', 
+            btn.classList.contains(isEnabled ? 'toggle_on' : 'toggle_off'));
+    });
+}
 
 // LISTENERS
 
-toggle.addEventListener('change', async () => {
-
-    if(toggle.checked) { // changed to true
-        // set toggle value to true
-        chrome.storage.sync.set({enabled: true});
-        reportStatus('toggled on');
-        
-        // get list of open tabs
-        let tabs = await chrome.tabs.query({currentWindow: true});
-        for(var i = 0; i < tabs.length; i++) {
-            let tab = tabs[i];
-            // if tab is valid site, attempt to remove counter from title
-            if(tab.url.includes('https://') || tab.url.includes('http://')) {
-                chrome.scripting.executeScript({
-                    target: {tabId: tab.id},
-                    function: removeNotificationCounter
-                });
-            }
-        }
-                
-    } else { // changed to false
-        // set toggle value to false
-        chrome.storage.sync.set({enabled: false});
-        reportStatus('toggled off');
-    }
+// Toggle extension ON/OFF
+toggle.addEventListener('click', () => {
+    let isEnabled = !toggle.classList.contains('toggle--checked');
+    browserAPI.storage.sync.set({ enabled: isEnabled });
+    updateToggleUI(isEnabled);
 });
 
 
-// FUNCTIONS
-
-// function to remove '(x)' from the beginning of a tab's title
-function removeNotificationCounter() {
-    let title = document.title;
-
-    let l = title.indexOf('(')
-    let r = title.indexOf(')')
-    if (l !== -1 && r !== -1 && l < r) {
-        toRemove = title.slice(l, r+1)
-        title = title.replace(toRemove, "").replace("  ", " ").trim()
-    }
-
-    document.title = title;
-}
-
-// reports action and whether or not the extension is enabled or not
-function reportStatus(msg) {
-    chrome.storage.sync.get(['enabled'], ({enabled}) => {
-        console.log({'status': msg, 'enabled': enabled});
+// Save Whitelist, Blacklist
+saveButton.addEventListener('click', () => {
+    browserAPI.storage.sync.set({
+        whitelist: whitelistInput.value.trim(),
+        blacklist: blacklistInput.value.trim(),
+    }, () => {
+        alert('Settings saved!');
     });
-}
+});
+

@@ -1,0 +1,112 @@
+:root {
+    --bg-color: #141E24;
+    --txt-color: #316D7C;
+    --sel-text-color: #E96C4C;
+    --sel-bg: #316D7C;
+    --input-txt: #FFFFFF
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--txt-color);
+    font-family: sans-serif;
+    width: 348px;
+    margin: 0;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.header {
+    padding: 18px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#extension_name {
+    color: var(--sel-text-color);
+    margin: 0;
+}
+
+.settings {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center;  /* Center elements horizontally */
+    gap: 12px; /* Add spacing between labels, inputs, and the button */
+    margin: 0px 0px 10px 0px;
+    /*border: 2px solid red;*/
+}
+
+.input_block{
+    /*border: 2px solid blue;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.input_block > label{
+    font-size: 1rem;
+}
+
+input {
+    width: 87%;
+    padding: 6px;
+    border: 1px solid var(--sel-bg);
+    border-radius: 4px;
+    background: var(--bg-color);
+    color: var(--input-txt);
+}
+
+.toggle {
+    background-color: var(--bg-color);
+    border: 0.125rem solid var(--sel-bg);
+    color: var(--input-txt);
+    display: inline-flex;
+    height: 1.5rem;
+    position: relative;
+}
+.toggle_btn {
+    align-items: center;
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    height: 100%;
+    width: 3rem;
+    position: relative;
+    transition: background-color 250ms;
+}
+.toggle::before {
+    background-color: var(--sel-bg);
+    content: "";
+    display: inline-block;
+    height: 100%;
+    left: 50%;
+    position: absolute;
+    top: 0;
+    transition: left 125ms;
+    width: 50%;
+}
+.toggle--checked::before {
+    left: 0;
+}
+
+#saveSettings {
+    background-color: var(--bg-color);
+    border: 0.125rem solid var(--sel-bg);
+    box-sizing: content-box;
+    color: var(--input-txt);
+    cursor: pointer;
+    display: inline-block;
+    height: 1.5rem;
+    line-height: 0.75rem;
+    min-width: 1.5rem;
+    outline: none;
+    padding: 0;
+    width: 45px;
+    text-align: center;
+    transition: background-color 250ms;
+}
+
+#saveSettings:focus-visible{
+    background-color: var(--sel-bg);
+}
