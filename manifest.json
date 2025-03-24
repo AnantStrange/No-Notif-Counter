@@ -1,5 +1,5 @@
 {
-    "name": "No Notif Counter",
+    "name": "NoTabNotif",
     "version": "1.1",
     "manifest_version": 2,
     "description": "Removes the notification counter in tab titles.",
@@ -29,7 +29,7 @@
     },
     "browser_specific_settings": {
         "gecko": {
-            "id": "no-notif-counter@yourdomain.com"
+            "id": "anantstrange@protonmail.com"
         }
     }
 }
