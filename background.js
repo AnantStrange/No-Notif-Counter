@@ -1,4 +1,4 @@
-console.log("🔥 Background script loaded!");
+console.debug("🔥 Background script loaded!");
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
 function initializeExtension() {
@@ -53,21 +53,21 @@ browserAPI.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 async function runScriptOnTab(tabId, tabUrl, retries = 5) {
     console.debug(`🔄 runScriptOnTab called for tabId: ${tabId} tabUrl: ${tabUrl}`);
 
-    const blockedSchemes = ["chrome://", "brave://", "about://"];
-    if (!tabUrl || blockedSchemes.some(scheme => tabUrl.startsWith(scheme))) {
-        console.debug(`⚠️ Skipping internal page: ${tabUrl}`);
-        return;
-    }
-
     browserAPI.storage.sync.get(['extensionEnabled', 'whitelist', 'blacklist', 'mode'], (data) => {
-        console.debug(`whitelist : ${data.whitelist} | blacklist : ${data.blacklist} | mode = ${data.mode}`);
         const extensionEnabled = data?.extensionEnabled === "true";
+        if (!extensionEnabled) {
+            console.debug(`🚫 Extension is disabled.`);
+            return;
+        }
+        console.debug(`whitelist : ${data.whitelist} | blacklist : ${data.blacklist} | mode = ${data.mode}`);
+
         const mode = data?.mode || "blacklist";
         const whitelist = data?.whitelist || "";
         const blacklist = data?.blacklist || "";
+        const blockedSchemes = ["chrome://", "brave://", "about://"];
 
-        if (!extensionEnabled) {
-            console.debug(`🚫 Extension is disabled. Not running script on tab ${tabId}`);
+        if (!tabUrl || blockedSchemes.some(scheme => tabUrl.startsWith(scheme))) {
+            console.debug(`⚠️ Skipping internal page: ${tabUrl}`);
             return;
         }
 
@@ -107,17 +107,28 @@ function shouldRunScript(tabUrl, mode, whitelist, blacklist) {
     return false;
 }
 
-// Function to remove '(x)' from the beginning of a tab's title
+// Function to remove '(x)' from the beginning of a tab's title and inject a // Observer to monitor title changes.
 function removeNotificationCounter() {
-    let title = document.title;
-
-    let l = title.indexOf('(');
-    let r = title.indexOf(')');
-    if (l !== -1 && r !== -1 && l < r) {
-        let toRemove = title.slice(l, r + 1);
-        title = title.replace(toRemove, "").replace("  ", " ").trim();
+    function cleanTitle() {
+        const newTitle = document.title.replace(/\s*\(\d+\)\s*/, '');
+        if (newTitle !== document.title) {
+            document.title = newTitle;
+        }
     }
 
-    document.title = title;
-}
+    const titleElement = document.querySelector('title');
+    if (!titleElement) return;
 
+    cleanTitle(); // Run once immediately
+
+    // Efficient observer
+    const observer = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+            if (mutation.type === "childList") {
+                cleanTitle(); // Only update if necessary
+            }
+        }
+    });
+
+    observer.observe(titleElement, { childList: true);
+}
