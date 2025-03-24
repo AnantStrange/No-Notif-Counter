@@ -1,59 +1,56 @@
-// INITIALIZATION
-let toggle = document.querySelector('.toggle');
-let toggleBtns = document.querySelectorAll('.toggle_btn');
-let whitelistInput = document.getElementById('whitelist');
-let blacklistInput = document.getElementById('blacklist');
-let saveButton = document.getElementById('saveSettings');
-let modeWhitelist = document.getElementById('whitelist_mode');
-let modeBlacklist = document.getElementById('blacklist_mode');
+let toggles = document.querySelectorAll('.toggle');
 const browserAPI = typeof browser !== "undefined" ? browser : chrome;
 
-// Load stored values
-browserAPI.storage.sync.get(['enabled', 'whitelist', 'blacklist', 'mode'], (data) => {
-    let isEnabled = data.enabled ?? true;
-    updateToggleUI(isEnabled);
+// Load stored values dynamically for any toggle
+browserAPI.storage.sync.get(null, (data) => {
+    console.debug("Loaded Data:", data); // Debugging
+    toggles.forEach(toggle => {
+        let key = toggle.dataset.key;
+        let defaultValue = toggle.dataset.valueOff; // Default to the "off" state value
+        let storedValue = data[key] ?? defaultValue; // Get from storage, or use default
 
-    whitelistInput.value = data.whitelist || "";
-    blacklistInput.value = data.blacklist || "";
+        updateToggleUI(toggle, storedValue);
+    });
 
-    // Default to blacklist mode if mode is undefined or incorrect
-    if (data.mode === "whitelist") {
-        modeWhitelist.checked = true;
-        modeBlacklist.checked = false;
-    } else{
-        modeWhitelist.checked = false;
-        modeBlacklist.checked = true;
-    }
-
+    document.getElementById('whitelist').value = data.whitelist || "";
+    document.getElementById('blacklist').value = data.blacklist || "";
 });
 
-// Function to update the UI based on the toggle state
-function updateToggleUI(isEnabled) {
-    toggle.classList.toggle('toggle--checked', isEnabled);
-    
+// Function to update a single toggle UI
+function updateToggleUI(toggle, selectedValue) {
+    let isOn = selectedValue === toggle.dataset.valueOn;
+    toggle.classList.toggle('toggle--checked', isOn);
+
+    let toggleBtns = toggle.querySelectorAll('.toggle_btn');
     toggleBtns.forEach(btn => {
         btn.classList.toggle('toggle_btn--active', 
-            btn.classList.contains(isEnabled ? 'toggle_on' : 'toggle_off'));
+            btn.classList.contains(isOn ? 'toggle_on' : 'toggle_off'));
     });
 }
 
 // LISTENERS
+toggles.forEach(toggle => {
+    toggle.addEventListener('click', () => {
+        let key = toggle.dataset.key;
+        let newValue = toggle.classList.contains('toggle--checked') 
+            ? toggle.dataset.valueOff 
+            : toggle.dataset.valueOn; // Switch state
 
-// Toggle extension ON/OFF
-toggle.addEventListener('click', () => {
-    let isEnabled = !toggle.classList.contains('toggle--checked');
-    browserAPI.storage.sync.set({ enabled: isEnabled });
-    updateToggleUI(isEnabled);
+        console.debug(`Saving: ${key} = ${newValue}`); // Debugging
+        browserAPI.storage.sync.set({ [key]: newValue }, () => {
+            console.debug("Storage updated successfully!"); // Debugging
+        });
+
+        updateToggleUI(toggle, newValue);
+    });
 });
 
 
-// Save Whitelist, Blacklist
-saveButton.addEventListener('click', () => {
-    let selectedMode = modeWhitelist.checked ? "whitelist" : "blacklist";
+// Save settings button
+document.getElementById('saveSettings').addEventListener('click', () => {
     browserAPI.storage.sync.set({
-        whitelist: whitelistInput.value.trim(),
-        blacklist: blacklistInput.value.trim(),
-        mode: selectedMode
+        whitelist: document.getElementById('whitelist').value.trim(),
+        blacklist: document.getElementById('blacklist').value.trim()
     }, () => {
         alert('Settings saved!');
     });

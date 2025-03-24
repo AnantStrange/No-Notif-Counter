@@ -6,21 +6,19 @@
     <body>
         <div class="header">
             <h1 id="extension_name">No Notif Counter</h1>
-            <span class="toggle toggle--checked">
-                <span class="toggle_btn toggle_on toggle_btn--active">On</span>
+            <span class="toggle" data-key="extensionEnabled" data-value-on="true" data-value-off="false">
+                <span class="toggle_btn toggle_on">On</span>
                 <span class="toggle_btn toggle_off">Off</span>
             </span>
+
         </div>
 
         <div class="settings">
-            <div class="input_block">
-                <label>Mode:</label>
-                <input type="radio" id="whitelist_mode" name="mode" value="whitelist">
-                <label for="whitelist_mode">Whitelist</label>
+            <span class="toggle" data-key="mode" data-value-on="whitelist" data-value-off="blacklist">
+                <span class="toggle_btn toggle_on">Whitelist</span>
+                <span class="toggle_btn toggle_off">Blacklist</span>
+            </span>
 
-                <input type="radio" id="blacklist_mode" name="mode" value="blacklist">
-                <label for="blacklist_mode">Blacklist</label>
-            </div>
             <div class="input_block">
                 <label>Whitelist ("," separated URLs)</label>
                 <input id="whitelist" type="text" placeholder="example.com, site.org">

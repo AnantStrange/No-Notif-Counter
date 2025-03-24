@@ -2,6 +2,7 @@
     --bg-color: #141E24;
     --txt-color: #316D7C;
     --sel-text-color: #E96C4C;
+    --hover-color: rgb(25, 57, 69);
     --sel-bg: #316D7C;
     --input-txt: #FFFFFF
 }
@@ -48,7 +49,7 @@ body {
     font-size: 1rem;
 }
 
-input {
+.input_block > input {
     width: 87%;
     padding: 6px;
     border: 1px solid var(--sel-bg);
@@ -71,7 +72,8 @@ input {
     display: inline-flex;
     justify-content: center;
     height: 100%;
-    width: 3rem;
+    /*width: 3rem;*/
+    padding: 0px 7px;
     position: relative;
     transition: background-color 250ms;
 }
@@ -88,6 +90,9 @@ input {
 }
 .toggle--checked::before {
     left: 0;
+}
+.toggle_btn:hover:not(.toggle__btn--active) {
+    background-color: var(--hover-color);
 }
 
 #saveSettings {
@@ -107,6 +112,14 @@ input {
     transition: background-color 250ms;
 }
 
-#saveSettings:focus-visible{
-    background-color: var(--sel-bg);
+#saveSettings:hover,
+#saveSettings:focus{
+    background-color: var(--hover-color);
+}
+
+.flex{
+    display: flex;
+    /*border: 2px solid yellow;*/
+    width: 100%;
+    justify-content: center;
 }
