@@ -130,5 +130,5 @@ function removeNotificationCounter() {
         }
     });
 
-    observer.observe(titleElement, { childList: true);
+    observer.observe(titleElement, { childList: true});
 }
